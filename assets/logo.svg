@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="lodestone logo">
+  <defs>
+    <linearGradient id="poleN" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2cd4d4"/>
+      <stop offset="1" stop-color="#1f9a9a"/>
+    </linearGradient>
+    <linearGradient id="poleS" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3fcf6e"/>
+      <stop offset="1" stop-color="#2a9a4f"/>
+    </linearGradient>
+    <radialGradient id="bgGlow" cx="0.5" cy="0.5" r="0.55">
+      <stop offset="0" stop-color="#16202c"/>
+      <stop offset="1" stop-color="#0d1117"/>
+    </radialGradient>
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.4"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="256" height="256" rx="48" fill="url(#bgGlow)"/>
+
+  <!-- Compass rose: four faint cardinal ticks -->
+  <g stroke="#8b949e" stroke-width="1.5" stroke-linecap="round" opacity="0.45">
+    <line x1="128" y1="36" x2="128" y2="52"/>
+    <line x1="128" y1="204" x2="128" y2="220"/>
+    <line x1="36" y1="128" x2="52" y2="128"/>
+    <line x1="204" y1="128" x2="220" y2="128"/>
+  </g>
+
+  <!-- Outer ring -->
+  <circle cx="128" cy="128" r="92" fill="none" stroke="#1f3142" stroke-width="3"/>
+  <circle cx="128" cy="128" r="92" fill="none" stroke="#2cd4d4" stroke-width="1.5" opacity="0.35" stroke-dasharray="2 8"/>
+
+  <!-- Magnetic field arcs -->
+  <g fill="none" stroke="#2cd4d4" stroke-width="1.5" opacity="0.55">
+    <path d="M 64 88 Q 128 60 192 88"/>
+    <path d="M 64 168 Q 128 196 192 168"/>
+  </g>
+  <g fill="none" stroke="#3fcf6e" stroke-width="1.5" opacity="0.4">
+    <path d="M 76 102 Q 128 80 180 102"/>
+    <path d="M 76 154 Q 128 176 180 154"/>
+  </g>
+
+  <!-- Lodestone diamond (compass needle) -->
+  <g filter="url(#softShadow)">
+    <!-- North half: cyan -->
+    <polygon points="128,52 168,128 128,128 88,128" fill="url(#poleN)"/>
+    <!-- South half: green -->
+    <polygon points="128,204 168,128 128,128 88,128" fill="url(#poleS)"/>
+    <!-- Center seam highlight -->
+    <line x1="88" y1="128" x2="168" y2="128" stroke="#0d1117" stroke-width="2.5"/>
+    <!-- Center pivot -->
+    <circle cx="128" cy="128" r="6" fill="#0d1117" stroke="#e6edf3" stroke-width="1.5"/>
+  </g>
+
+  <!-- Pole labels -->
+  <g font-family="'JetBrains Mono', ui-monospace, monospace" font-size="11" font-weight="700" fill="#e6edf3" text-anchor="middle">
+    <text x="128" y="38" opacity="0.7">N</text>
+    <text x="128" y="230" opacity="0.7">S</text>
+  </g>
+</svg>

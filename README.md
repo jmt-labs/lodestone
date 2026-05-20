@@ -1,105 +1,84 @@
-# lodestone
+<p align="center">
+  <img src="assets/banner.svg" alt="lodestone — Liest das AI-Ökosystem für dein Repo." width="100%">
+</p>
 
-**Liest das AI-Ökosystem für dein Repo.**
+<p align="center">
+  <a href="https://github.com/jmt-labs/lodestone/actions/workflows/ci.yml"><img src="https://github.com/jmt-labs/lodestone/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
+  <img src="https://img.shields.io/badge/go-1.24%2B-00ADD8.svg" alt="Go 1.24+">
+  <img src="https://img.shields.io/badge/status-alpha-orange.svg" alt="alpha">
+</p>
 
-`lodestone` ist ein Trend-Intelligence-System für Code-Repositories: Es
-sammelt Signale aus der AI-Welt (GitHub-Trending, HackerNews, MCP-Registry,
-Framework-Releases, ArXiv, npm/PyPI), bildet einen Repo-Fingerprint und
-scort jedes Signal gegen dein Projekt entlang **Compatibility**, **Effort**,
-**ROI** und **Risk**. Daraus entstehen reproduzierbare Empfehlungen — und
-optional Spec/Plan/Tasks-Triples im superpowers-Format.
+`lodestone` sammelt AI-Ökosystem-Signale, scort sie deterministisch gegen
+einen Repo-Fingerprint und liefert reproduzierbare Empfehlungen — als CLI,
+als MCP-Server und als Claude-Skill-Pack.
 
-Der Name ist Programm: Ein Lodestone ist ein natürlich magnetischer
-Stein — ein Kompass, der zeigt, ohne den Kurs vorzuschreiben.
-
-## Status
-
-**Pre-Alpha / Phase 1 (MVP)** — siehe
-[`docs/superpowers/plans/2026-05-20-lodestone-mvp.md`](docs/superpowers/plans/2026-05-20-lodestone-mvp.md).
-
-Phase 1 ist bewusst **LLM-frei**: deterministisches Scoring, lokale
-JSONL-Dateien, keine externen Calls außer den konfigurierten Quellen.
-
-## Installation
-
-> **Noch nicht released.** Sobald das erste Tag steht:
-
-```sh
-# Homebrew (geplant)
-brew install jmt-labs/tap/lodestone
-
-# apt (geplant) — via GoReleaser-erzeugtes .deb
-
-# Go install
-go install github.com/jmt-labs/lodestone/cmd/lodestone@latest
-```
-
-## Subkommandos
-
-| Verb | Status | Zweck |
-|---|---|---|
-| `lodestone init` | ✅ Phase 2 | `.lodestone.yaml`, `.gitignore`-Snippet, Skills nach `.claude/skills/` installieren |
-| `lodestone fingerprint` | ✅ Phase 1 | Aktuelles Repo analysieren → `.lodestone/fingerprint.json` |
-| `lodestone ingest` | ✅ Phase 1-2 | Externe Signale abrufen → `.lodestone/signals.jsonl` (6 Quellen, siehe unten) |
-| `lodestone score` | ✅ Phase 1 | Signale × Fingerprint scoren → `.lodestone/recommendations.jsonl` |
-| `lodestone signals` | ✅ Phase 1 | Gespeicherte Signale filtern / anzeigen |
-| `lodestone plan <rec-id>` | ✅ Phase 2 | Spec / Plan aus Recommendation generieren (ruft Claude-CLI) |
-| `lodestone memory` | ✅ Phase 3 | `decisions.log` → `.claude/memory.json` konsolidieren |
-| `lodestone-mcp` (2. Binary) | ✅ Phase 3 | MCP-Server über stdio (`list_signals`, `query_trends`, `score_repo`, `generate_plan`, `record_decision`) |
-| `lodestone recommend` | Phase 2 (Skill) | Empfehlungen interaktiv durchgehen — `flavors/lodestone/skills/lodestone-recommend.md` |
-| `lodestone apply <rec-id>` | ✅ Phase 4 | Recommendation als Draft-PR (harte Gates: risk=low ∧ effort=XS ∧ compat≥0.85, ≤1/Tag, nie auf main) |
-| `lodestone undo <branch>` | ✅ Phase 4 | Apply rückgängig (PR schließen + Branch löschen) |
-| `lodestone stats` | ✅ Phase 4 | Apply-Erfolgs-Statistik aus `.lodestone/applies.jsonl` |
-| `lodestone calibrate` / `share` | Phase 5+ | Scoring-Tuning / Cross-Repo-Sharing (Privacy-Spec liegt vor) |
-
-**Ingest-Quellen (Phase 1+2):** `github_trending`, `hackernews`,
-`arxiv`, `anthropic_changelog`, `openai_changelog`, `npm_trending`.
+Der Name ist Programm: Ein Lodestone ist ein natürlich magnetischer Stein —
+ein Kompass, der zeigt, ohne den Kurs vorzuschreiben.
 
 ## Schnelleinstieg
 
 ```sh
+go install github.com/jmt-labs/lodestone/cmd/lodestone@latest
+
 cd dein-projekt/
-lodestone init                       # Konfig + Skills + .gitignore-Snippet
-lodestone fingerprint                # Repo analysieren
-lodestone ingest                     # alle 6 Quellen abrufen
-lodestone score                      # Signale gegen Fingerprint scoren
-lodestone signals --top 10           # Top-10 anzeigen
-lodestone plan <rec-id>              # Claude erzeugt Spec + Plan
+lodestone init                # .lodestone.yaml + Skills + .gitignore-Snippet
+lodestone fingerprint         # Repo analysieren
+lodestone ingest              # 6 Quellen abrufen
+lodestone score               # gegen Fingerprint scoren
+lodestone signals --top 10    # Top-10 anzeigen
 ```
 
-Mehr Details: [`docs/lodestone.md`](docs/lodestone.md).
+Detaillierte Anleitung im [**User-Guide**](docs/lodestone.md), volle
+Subkommando-Übersicht in der [**CLI-Reference**](docs/cli-reference.md).
+
+## Was lodestone liefert
+
+- **Zwei Binaries:** `lodestone` (CLI) und `lodestone-mcp` (MCP-Server
+  über stdio).
+- **Sechs Ingest-Quellen** out of the box: GitHub-Trending, HackerNews,
+  ArXiv, Anthropic-Changelog, OpenAI-Changelog, npm-Trending.
+- **Deterministisches Scoring** (Compatibility / Effort / Risk) mit
+  Determinismus-Garantie über Unit-Test und E2E-Diff.
+- **Planning-Engine** ruft Claude über die `claude`-CLI und erzeugt
+  Spec + Plan im superpowers-Format.
+- **Auto-PR-Engine** (Phase 4) mit harten Safety-Gates: nur bei
+  `risk=low ∧ effort=XS ∧ compatibility≥0.85`, max 1 PR/Tag, niemals
+  auf `main`, immer Draft.
+- **Vier Claude-Skills** (`lodestone-scout`, `-recommend`, `-plan`,
+  `-review-trends`) — installierbar via `lodestone init`.
+
+## Dokumentation
+
+| Dokument | Inhalt |
+|---|---|
+| [User-Guide](docs/lodestone.md) | Installation, Konfig, jedes Subkommando mit Flags |
+| [CLI-Reference](docs/cli-reference.md) | Vollständige Subkommando-Übersicht je Phase |
+| [Architektur](docs/architecture.md) | Drei-Ebenen-Modell, Datenfluss, Code-Layout |
+| [Release-Prozess](docs/release-process.md) | Tag-getriebener GoReleaser-Workflow |
+| [Skills](flavors/lodestone/skills/) | Vier Claude-Skill-Markdowns |
+| [Spec & Pläne](docs/superpowers/) | Design-Specs für Phase 1-4 |
+| [Privacy-Spec](docs/superpowers/specs/2026-05-20-lodestone-sharing-privacy.md) | Cross-Repo-Sharing (Phase 5+) |
+| [CHANGELOG](CHANGELOG.md) | Was sich pro Phase geändert hat |
 
 ## Lokale Artefakte
 
-`lodestone` schreibt alle Zustände in `.lodestone/` im Zielprojekt:
+`lodestone` schreibt nach `.lodestone/` im Zielprojekt. Per Default
+gehört dieses Verzeichnis in `.gitignore` — `lodestone init` legt den
+Snippet automatisch an. Details: [User-Guide](docs/lodestone.md).
 
-```
-.lodestone/
-├── cache/                    # Roh-Fetches mit TTL-Datum
-├── signals.jsonl             # Normalisierte, deduplizierte Signale
-├── fingerprint.json          # Letzter Repo-Scan
-├── recommendations.jsonl     # Gescorte Vorschläge
-└── decisions.log             # Audit-Trail (einzige Datei nicht in .gitignore)
-```
+## Status
 
-## Architektur
+**Pre-Alpha.** Phasen 1–4 sind auf `main` gemerged und CI-grün; die
+API-Stabilität ist noch nicht garantiert (`-alpha`-Suffix bis zur
+ersten stabilen Release).
 
-Drei Ebenen:
+## Beiträge
 
-1. **CLI `lodestone`** (Cobra, Go) — deterministische Pipeline.
-2. **Claude-Skills** (`flavors/`-Stil, Phase 2) — direkt installierbar
-   in beliebige Repos.
-3. **MCP-Server `lodestone-mcp`** (Phase 3) — separates Go-Binary mit
-   `list_signals`, `query_trends`, `score_repo`, `generate_plan`,
-   `record_decision`.
-
-Details: [`docs/superpowers/specs/2026-05-20-lodestone-design.md`](docs/superpowers/specs/2026-05-20-lodestone-design.md).
-
-## Entwicklung
-
-Siehe [`CONTRIBUTING.md`](CONTRIBUTING.md). Pflicht-Workflow: Spec →
-Plan → Branch → TDD → PR.
+Spec → Plan → Branch → TDD → PR. Siehe [CONTRIBUTING](CONTRIBUTING.md).
+Pflicht-Skills, Sprachkonventionen und der direkte-`main`-Push-Bann sind
+in [CLAUDE.md](CLAUDE.md) und [AGENTS.md](AGENTS.md) dokumentiert.
 
 ## Lizenz
 
-MIT — siehe [`LICENSE`](LICENSE).
+[MIT](LICENSE) — Copyright (c) jmt-labs.

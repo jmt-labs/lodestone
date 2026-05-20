@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300" role="img" aria-label="lodestone — Liest das AI-Ökosystem für dein Repo.">
+  <defs>
+    <linearGradient id="wordmark" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2cd4d4"/>
+      <stop offset="1" stop-color="#3fcf6e"/>
+    </linearGradient>
+    <linearGradient id="poleN" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2cd4d4"/>
+      <stop offset="1" stop-color="#1f9a9a"/>
+    </linearGradient>
+    <linearGradient id="poleS" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3fcf6e"/>
+      <stop offset="1" stop-color="#2a9a4f"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0d1117" stop-opacity="0"/>
+      <stop offset="1" stop-color="#0d1117"/>
+    </linearGradient>
+    <radialGradient id="markGlow" cx="0.5" cy="0.5" r="0.55">
+      <stop offset="0" stop-color="#16202c"/>
+      <stop offset="1" stop-color="#0d1117"/>
+    </radialGradient>
+    <pattern id="dots" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#1f3142"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="300" fill="#0d1117"/>
+  <rect width="1200" height="300" fill="url(#dots)" opacity="0.6"/>
+
+  <!-- Faint horizontal grid lines -->
+  <g stroke="#1f3142" stroke-width="1" opacity="0.35">
+    <line x1="0" y1="80" x2="1200" y2="80"/>
+    <line x1="0" y1="220" x2="1200" y2="220"/>
+  </g>
+
+  <!-- Wordmark + tagline (left) -->
+  <g font-family="'JetBrains Mono', 'Fira Code', ui-monospace, monospace">
+    <text x="80" y="170" font-size="92" font-weight="700" fill="url(#wordmark)" letter-spacing="-2">lodestone</text>
+  </g>
+  <g font-family="'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif" fill="#e6edf3">
+    <text x="82" y="205" font-size="22" font-weight="500" opacity="0.92">Liest das AI-Ökosystem für dein Repo.</text>
+  </g>
+  <g font-family="'JetBrains Mono', ui-monospace, monospace" fill="#8b949e">
+    <text x="82" y="240" font-size="14" font-weight="500" letter-spacing="1.5">INGEST · FINGERPRINT · SCORE · PLAN · MCP · AUTO-PR</text>
+  </g>
+
+  <!-- Decorative bracket on the left -->
+  <g stroke="#2cd4d4" stroke-width="2" fill="none" opacity="0.85">
+    <path d="M 56 132 L 50 132 L 50 248 L 56 248"/>
+  </g>
+
+  <!-- Compass mark on the right -->
+  <g transform="translate(1000 60)">
+    <rect width="160" height="180" rx="28" fill="url(#markGlow)"/>
+
+    <!-- Outer ring -->
+    <circle cx="80" cy="90" r="62" fill="none" stroke="#1f3142" stroke-width="2.5"/>
+    <circle cx="80" cy="90" r="62" fill="none" stroke="#2cd4d4" stroke-width="1.2" opacity="0.35" stroke-dasharray="2 7"/>
+
+    <!-- Faint cardinal ticks -->
+    <g stroke="#8b949e" stroke-width="1.2" stroke-linecap="round" opacity="0.5">
+      <line x1="80" y1="22" x2="80" y2="34"/>
+      <line x1="80" y1="146" x2="80" y2="158"/>
+      <line x1="14" y1="90" x2="26" y2="90"/>
+      <line x1="134" y1="90" x2="146" y2="90"/>
+    </g>
+
+    <!-- Field arcs -->
+    <g fill="none" stroke="#2cd4d4" stroke-width="1.2" opacity="0.55">
+      <path d="M 32 64 Q 80 44 128 64"/>
+      <path d="M 32 116 Q 80 136 128 116"/>
+    </g>
+
+    <!-- Compass needle (diamond) -->
+    <g>
+      <polygon points="80,34 108,90 80,90 52,90" fill="url(#poleN)"/>
+      <polygon points="80,146 108,90 80,90 52,90" fill="url(#poleS)"/>
+      <line x1="52" y1="90" x2="108" y2="90" stroke="#0d1117" stroke-width="2"/>
+      <circle cx="80" cy="90" r="4" fill="#0d1117" stroke="#e6edf3" stroke-width="1.2"/>
+    </g>
+  </g>
+
+  <!-- Subtle right-edge fade so the mark blends into the bg -->
+  <rect x="1140" y="0" width="60" height="300" fill="url(#fade)"/>
+</svg>
