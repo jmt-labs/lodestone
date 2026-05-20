@@ -1,0 +1,27 @@
+# Binaries & build artifacts
+/bin/
+/dist/
+*.exe
+*.dll
+*.so
+*.dylib
+/lodestone
+/lodestone-mcp
+
+# Go test artifacts
+*.test
+*.out
+coverage.out
+coverage.html
+
+# Local lodestone runtime artifacts (in target repos)
+.lodestone/
+
+# Editor / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Goreleaser local
+/dist

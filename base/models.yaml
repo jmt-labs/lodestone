@@ -1,0 +1,10 @@
+# Modell-Routing für lodestone
+#
+# Jede Rolle (siehe AGENTS.md) ist hier einem konkreten Claude-Modell
+# zugewiesen. Werte sind die exakten Modell-IDs der Anthropic-API.
+
+models:
+  planning: claude-opus-4-7
+  default: claude-sonnet-4-6
+  mechanical: claude-haiku-4-5-20251001
+  review: claude-sonnet-4-6
