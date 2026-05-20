@@ -64,10 +64,10 @@ func TestCompatibilityMediumMatch(t *testing.T) {
 
 func TestEffortHeuristics(t *testing.T) {
 	cases := []struct {
-		name  string
+		name   string
 		compat float64
-		stars int
-		want  schema.EffortLevel
+		stars  int
+		want   schema.EffortLevel
 	}{
 		{"no-match XL", 0.0, 1000, schema.EffortXL},
 		{"match low-star S", 0.5, 50, schema.EffortS},
@@ -86,11 +86,11 @@ func TestEffortHeuristics(t *testing.T) {
 func TestRiskHeuristics(t *testing.T) {
 	now := time.Date(2026, 5, 20, 0, 0, 0, 0, time.UTC)
 	cases := []struct {
-		name      string
-		stars     int
-		license   string
+		name       string
+		stars      int
+		license    string
 		lastCommit time.Time
-		want      schema.RiskLevel
+		want       schema.RiskLevel
 	}{
 		{"all-good low", 800, "mit", now.AddDate(0, 0, -10), schema.RiskLow},
 		{"no-license high", 800, "", now.AddDate(0, 0, -10), schema.RiskHigh},

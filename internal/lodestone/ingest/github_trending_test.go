@@ -40,7 +40,7 @@ func TestGithubTrendingFetchSuccess(t *testing.T) {
 				"description":      "",
 				"language":         "JavaScript",
 				"stargazers_count": 75,
-				"license":           nil,
+				"license":          nil,
 				"pushed_at":        "2026-05-18T08:30:00Z",
 				"topics":           []string{},
 			},

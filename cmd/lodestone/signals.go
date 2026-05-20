@@ -13,10 +13,10 @@ import (
 
 func newSignalsCmd(rootPath *string) *cobra.Command {
 	var (
-		since     string
-		source    string
-		top       int
-		asJSON    bool
+		since  string
+		source string
+		top    int
+		asJSON bool
 	)
 	cmd := &cobra.Command{
 		Use:   "signals",

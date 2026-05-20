@@ -103,7 +103,7 @@ func TestAnalyzeSkipsExcludedDirs(t *testing.T) {
 
 func TestAnalyzeTestRatio(t *testing.T) {
 	root := t.TempDir()
-	writeFile(t, root, "foo.go", "package x\n\nfunc A() {}\nfunc B() {}\nfunc C() {}\n")            // 5 lines, non-test
+	writeFile(t, root, "foo.go", "package x\n\nfunc A() {}\nfunc B() {}\nfunc C() {}\n")                // 5 lines, non-test
 	writeFile(t, root, "foo_test.go", "package x\n\nimport \"testing\"\nfunc TestA(t *testing.T) {}\n") // 4 lines, test
 
 	fp, err := New(root).Analyze()

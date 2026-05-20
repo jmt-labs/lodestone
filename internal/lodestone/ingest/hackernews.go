@@ -15,15 +15,15 @@ import (
 )
 
 const (
-	hackerNewsName       = "hackernews"
-	hnDefaultBaseURL     = "https://hacker-news.firebaseio.com"
-	hnDefaultScanLimit   = 100
-	hnDefaultFinalLimit  = 50
-	hnDefaultTimeout     = 15 * time.Second
-	hnInitialBackoff     = 200 * time.Millisecond
-	hnMaxBackoff         = 5 * time.Second
-	hnMaxRetries         = 3
-	hnItemURLFormat      = "https://news.ycombinator.com/item?id=%d"
+	hackerNewsName      = "hackernews"
+	hnDefaultBaseURL    = "https://hacker-news.firebaseio.com"
+	hnDefaultScanLimit  = 100
+	hnDefaultFinalLimit = 50
+	hnDefaultTimeout    = 15 * time.Second
+	hnInitialBackoff    = 200 * time.Millisecond
+	hnMaxBackoff        = 5 * time.Second
+	hnMaxRetries        = 3
+	hnItemURLFormat     = "https://news.ycombinator.com/item?id=%d"
 )
 
 var hnDefaultKeywords = []string{"ai", "llm", "mcp", "claude", "agent"}

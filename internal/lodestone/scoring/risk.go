@@ -7,9 +7,9 @@ import (
 )
 
 const (
-	riskPopularStars      = 500
-	riskFreshDays         = 90
-	riskStaleDays         = 180
+	riskPopularStars = 500
+	riskFreshDays    = 90
+	riskStaleDays    = 180
 )
 
 func Risk(sig schema.Signal, now time.Time) schema.RiskLevel {

@@ -7,11 +7,11 @@ import (
 )
 
 var nodeFrameworks = map[string]string{
-	"react":             "react",
-	"vue":               "vue",
-	"next":              "next",
-	"@anthropic-ai/sdk": "anthropic-sdk",
-	"svelte":            "svelte",
+	"react":                     "react",
+	"vue":                       "vue",
+	"next":                      "next",
+	"@anthropic-ai/sdk":         "anthropic-sdk",
+	"svelte":                    "svelte",
 	"@modelcontextprotocol/sdk": "mcp-sdk",
 }
 
