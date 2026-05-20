@@ -1,0 +1,83 @@
+# Lodestone — wöchentlicher Trend-Refresh.
+#
+# Kopiere diese Datei nach .github/workflows/lodestone-weekly.yml in
+# deinem Ziel-Repo. Sie holt jeden Sonntag 03:00 UTC frische Signale,
+# rescort die Pipeline und öffnet einen PR mit aktualisierten Artefakten.
+#
+# Voraussetzungen:
+# - lodestone-Binary im PATH (z. B. via `go install` Schritt unten)
+# - Repo erlaubt PRs vom Workflow (Settings → Actions → "Allow GitHub
+#   Actions to create and approve pull requests")
+
+name: lodestone-weekly
+
+on:
+  schedule:
+    - cron: "0 3 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Install lodestone
+        run: go install github.com/jmt-labs/lodestone/cmd/lodestone@latest
+
+      - name: Run pipeline
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          lodestone fingerprint
+          lodestone ingest
+          lodestone score
+          lodestone memory
+
+      - name: Check for diff
+        id: diff
+        run: |
+          if git diff --quiet .lodestone/recommendations.jsonl .claude/memory.json 2>/dev/null; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open PR
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="lodestone/weekly-$(date -u +%Y-%m-%d)"
+          git config user.name "lodestone-bot"
+          git config user.email "lodestone-bot@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add .lodestone/ .claude/memory.json
+          git commit -m "chore(lodestone): wöchentlicher Trend-Refresh $(date -u +%Y-%m-%d)"
+          git push -u origin "$BRANCH"
+
+          TOP=$(lodestone signals --top 5 --json | jq -r '.[] | "- \(.title) — \(.source) — ⭐ \(.stars)"')
+          gh pr create --base main --head "$BRANCH" \
+            --title "Lodestone Weekly $(date -u +%Y-%m-%d)" \
+            --body "Automatisch erzeugte wöchentliche Trend-Aktualisierung.
+
+## Top-Signale (Stars)
+
+$TOP
+
+## Geänderte Artefakte
+
+- \`.lodestone/recommendations.jsonl\`
+- \`.claude/memory.json\`
+
+Prüfe \`lodestone signals --top 20\` für die volle Liste oder ruf \`lodestone plan <rec-id>\` für eine konkrete Empfehlung."

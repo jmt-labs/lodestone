@@ -38,6 +38,7 @@ func newRootCmd() *cobra.Command {
 	cmd.AddCommand(newScoreCmd(&rootPath))
 	cmd.AddCommand(newSignalsCmd(&rootPath))
 	cmd.AddCommand(newPlanCmd(&rootPath))
+	cmd.AddCommand(newMemoryCmd(&rootPath))
 
 	for _, verb := range laterPhaseVerbs {
 		cmd.AddCommand(newStubCmd(verb.name, verb.short))

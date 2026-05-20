@@ -6,6 +6,29 @@ Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Added — Phase 3
+
+- **`lodestone-mcp` Binary** (`cmd/lodestone-mcp/`): zweites Binary,
+  spricht MCP über stdio (JSON-RPC 2.0, Protocol-Version
+  `2024-11-05`). Implementiert `initialize`, `tools/list`,
+  `tools/call`, schweigt bei Notifications.
+- **Fünf MCP-Tools** unter `internal/lodestone/mcp/tools.go`:
+  `list_signals`, `query_trends`, `score_repo`, `generate_plan`,
+  `record_decision` — alle rufen direkt in die Phase-1/2-Packages
+  (kein Duplikat-Code).
+- **Memory-Konsolidierung** (`internal/lodestone/memory/`,
+  `cmd/lodestone/memory.go`): `lodestone memory` aggregiert die
+  letzten N Tage (Default 90) aus `.lodestone/decisions.log` nach
+  `.claude/memory.json` — idempotent über (Datum,Verb,Summary)-Dedup.
+- **GitHub-Action-Template** unter
+  `.github/workflows/templates/lodestone-weekly.yml`: opt-in
+  reusable Workflow (Sonntag 03:00 UTC + `workflow_dispatch`), läuft
+  `fingerprint → ingest → score → memory`, öffnet PR mit Top-5-
+  Summary, wenn Diffs vorhanden.
+- **Build-System**: `make build` + `.goreleaser.yaml` bauen beide
+  Binaries (`lodestone` und `lodestone-mcp`), Archives enthalten
+  beide.
+
 ### Added — Phase 2
 
 - **Vier neue Ingest-Quellen** in `internal/lodestone/ingest/`:

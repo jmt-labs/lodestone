@@ -44,6 +44,8 @@ go install github.com/jmt-labs/lodestone/cmd/lodestone@latest
 | `lodestone score` | ✅ Phase 1 | Signale × Fingerprint scoren → `.lodestone/recommendations.jsonl` |
 | `lodestone signals` | ✅ Phase 1 | Gespeicherte Signale filtern / anzeigen |
 | `lodestone plan <rec-id>` | ✅ Phase 2 | Spec / Plan aus Recommendation generieren (ruft Claude-CLI) |
+| `lodestone memory` | ✅ Phase 3 | `decisions.log` → `.claude/memory.json` konsolidieren |
+| `lodestone-mcp` (2. Binary) | ✅ Phase 3 | MCP-Server über stdio (`list_signals`, `query_trends`, `score_repo`, `generate_plan`, `record_decision`) |
 | `lodestone recommend` | Phase 2 (Skill) | Empfehlungen interaktiv durchgehen — `flavors/lodestone/skills/lodestone-recommend.md` |
 | `lodestone apply` / `undo` | Phase 4 | Auto-PR-Engine |
 | `lodestone stats` / `calibrate` / `share` | Phase 3+ | Telemetrie- / Tuning-Werkzeuge |
