@@ -1,50 +1,47 @@
 # Contributing zu lodestone
 
-Danke für dein Interesse! Dieses Projekt folgt einem schlanken
+Danke für dein Interesse! Lodestone folgt einem schlanken
 Spec-Plan-PR-Workflow.
 
-## Workflow
+## Kurz-Einstieg
 
-1. **Brainstorming** → kurzes Design-Gespräch (Issue oder Chat).
+1. **Brainstorming** → Design-Idee.
 2. **Spec** in `docs/superpowers/specs/YYYY-MM-DD-<thema>-design.md`.
 3. **Plan** in `docs/superpowers/plans/YYYY-MM-DD-<thema>.md` mit
    Checkbox-Tasks.
-4. **Branch** nach Schema `feat/p<phase>-t<task>-<slug>` (z. B.
-   `feat/p1-t3-github-trending`).
-5. **TDD**: Test zuerst, dann Implementierung. Bei Bug-Fixes:
-   **Regressionstest VOR dem Fix** committen.
-6. **PR gegen `main`**, Body referenziert Spec/Plan und das Epic-Issue
-   via `Updates #N`. PRs werden **nur auf explizite Aufforderung**
-   erstellt.
+4. **Branch** nach Schema `feat/p<phase>-t<task>-<slug>`.
+5. **TDD-Implementierung** — bei Bug-Fix Regressionstest ZUERST.
+6. **PR gegen `main`** — nur auf explizite Aufforderung.
 
-## Sprachkonvention
+## Sprache
 
-- **Doku, Specs, Pläne, Commit-Messages: deutsch.**
+- Doku, Specs, Pläne, Commit-Messages: **deutsch**.
 - Code-Identifier und API-Felder: englisch.
-- Keine unnötigen Kommentare im Code.
 
 ## Lokale Entwicklung
 
-```
-make build         # baut cmd/lodestone in ./bin
-make test          # go test ./...
-make lint          # golangci-lint
+```sh
+make build         # baut bin/lodestone und bin/lodestone-mcp
+make test          # go test ./... (mit -race)
+make lint          # golangci-lint v2
 make vuln          # govulncheck
-make e2e           # E2E-Smoke-Test (ab T9)
+make e2e           # End-to-End-Smoke-Test
 ```
 
-## Code-Stil
+Alle vier müssen vor jedem PR grün sein.
 
-- Go 1.24+, Standardbibliothek bevorzugen.
-- Phase 1: nur Cobra (CLI) und `gopkg.in/yaml.v3` (Konfig, ab T7).
-- **YAGNI** — keine spekulativen Features, keine Abstraktionen
-  ohne konkreten zweiten Aufrufer.
+## Detailliert
 
-## Pflicht-Skills (für Claude-getriebene Arbeit)
+Vollständige Doku im `docs/contributor/`-Bereich:
 
-| Situation | Skill |
-|---|---|
-| Vor Feature/Implementierung | `superpowers:brainstorming` |
-| Während Implementierung | `superpowers:test-driven-development` |
-| Vor Commit/PR | `superpowers:verification-before-completion` |
-| Bei Bugs | `superpowers:systematic-debugging` (Regression-Test ZUERST) |
+- [Workflow](docs/contributor/workflow.md) — Pipeline, Branch-Schema, PR-Body-Template.
+- [Spec-Format](docs/contributor/spec-format.md) — Pflicht-Sektionen.
+- [Plan-Format](docs/contributor/plan-format.md) — Checkbox-Tasks.
+- [Skills-Policy](docs/contributor/skills-policy.md) — Pflicht-Skills, Regression-First-Regel.
+- [Testing](docs/contributor/testing.md) — Test-Pyramide, Coverage-Ziel.
+- [PR-Checkliste](docs/contributor/pr-checklist.md) — Pre-Merge-Gates.
+- [Release-Prozess](docs/contributor/release-process.md) — GoReleaser-Workflow.
+- [Doku-Wartung](docs/contributor/docs-maintenance.md) — wie die Doku synchron bleibt.
+
+Vorgaben für KI-Tools: [`CLAUDE.md`](CLAUDE.md). Rollen-Übersicht:
+[`AGENTS.md`](AGENTS.md).

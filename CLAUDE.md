@@ -55,19 +55,34 @@ expliziten Auftrag.
 - **Keine Kommentare im Code**, außer das WARUM ist non-obvious
   (versteckte Constraint, subtile Invariante, Workaround für Bug).
 
-## Phase-1-Invarianten
+## Historische Invarianten (Phase 1) und aktuelle Geltung
 
-Diese Regeln gelten bis zum Phase-1-Abschluss:
+Diese vier Invarianten wurden für Phase 1 aufgestellt. Punkte 1 und 3
+sind ab Phase 2 explizit gelockert; Punkte 2 und 4 gelten unverändert
+weiter und sind als ADRs festgehalten.
 
-1. **Keine LLM-Aufrufe** in produktivem Code-Pfad. Erst ab Phase 2.
+1. **~~Keine LLM-Aufrufe~~** — ab Phase 2 erlaubt in `lodestone plan`
+   und `lodestone apply` (über die `claude`-CLI). **Niemals** im
+   Score-Pfad — siehe
+   [ADR-0006](docs/internals/adr/0006-deterministisches-scoring.md).
 2. **Deterministische Pipeline** — zwei Score-Läufe mit identischem
-   Input müssen byte-identische sortierte Outputs liefern.
-3. **Minimaler Dependency-Footprint** — nur `github.com/spf13/cobra`
-   und `gopkg.in/yaml.v3`. Keine neuen externen Go-Deps ohne
-   explizite Diskussion.
+   Input müssen byte-identische sortierte Outputs liefern. Gilt
+   weiter, siehe
+   [ADR-0006](docs/internals/adr/0006-deterministisches-scoring.md)
+   und [Determinismus](docs/internals/determinism.md).
+3. **~~Minimaler Dependency-Footprint~~** — ab Phase 2 gelockert auf
+   „Standardbibliothek bevorzugen; neue Deps brauchen
+   Spec-Diskussion". Aktueller Stand: weiter nur `cobra` und
+   `yaml.v3`.
 4. **Anti-Hype-Defaults konservativ** — `min_stars: 50`,
    `min_age_days: 30`, `max_last_commit_age_days: 180`,
-   `require_license: true`.
+   `require_license: true`. Gilt weiter, siehe
+   [ADR-0005](docs/internals/adr/0005-anti-hype-defaults.md).
+
+Detaillierte Contributor-Vorgaben:
+[`docs/contributor/workflow.md`](docs/contributor/workflow.md),
+[`docs/contributor/skills-policy.md`](docs/contributor/skills-policy.md).
+Phasen-Status: [`docs/internals/roadmap.md`](docs/internals/roadmap.md).
 
 ## Modell-Routing
 
