@@ -23,6 +23,7 @@ help:
 build:
 	@mkdir -p $(BIN_DIR)
 	go build -o $(BIN_DIR)/$(BINARY) ./cmd/lodestone
+	go build -o $(BIN_DIR)/$(BINARY)-mcp ./cmd/lodestone-mcp
 
 test:
 	go test $(PKG)

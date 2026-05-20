@@ -21,6 +21,20 @@ builds:
       - arm64
     ldflags:
       - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
+  - id: lodestone-mcp
+    main: ./cmd/lodestone-mcp
+    binary: lodestone-mcp
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}}
 
 archives:
   - id: lodestone
@@ -30,6 +44,9 @@ archives:
     format_overrides:
       - goos: windows
         formats: [zip]
+    ids:
+      - lodestone
+      - lodestone-mcp
     files:
       - LICENSE
       - README.md
