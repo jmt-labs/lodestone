@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"path/filepath"
 	"sort"
 	"strings"
 	"time"
@@ -20,9 +19,6 @@ const (
 	hnDefaultScanLimit  = 100
 	hnDefaultFinalLimit = 50
 	hnDefaultTimeout    = 15 * time.Second
-	hnInitialBackoff    = 200 * time.Millisecond
-	hnMaxBackoff        = 5 * time.Second
-	hnMaxRetries        = 3
 	hnItemURLFormat     = "https://news.ycombinator.com/item?id=%d"
 )
 
@@ -101,16 +97,14 @@ func (h *HackerNews) Name() string { return hackerNewsName }
 
 func (h *HackerNews) Fetch(ctx context.Context) ([]schema.Signal, error) {
 	now := h.now()
-	cachePath := h.cachePath(now)
+	cp := cachePath(h.cacheDir, hackerNewsName, now)
 
-	if cachePath != "" {
-		cached, ok, err := loadCache(cachePath)
-		if err != nil {
-			return nil, fmt.Errorf("read cache: %w", err)
-		}
-		if ok {
-			return cached, nil
-		}
+	cached, ok, err := loadCache(cp)
+	if err != nil {
+		return nil, fmt.Errorf("read cache: %w", err)
+	}
+	if ok {
+		return cached, nil
 	}
 
 	topIDs, err := h.fetchTopStories(ctx)
@@ -148,19 +142,10 @@ func (h *HackerNews) Fetch(ctx context.Context) ([]schema.Signal, error) {
 		sigs = append(sigs, hnToSignal(*item, matched, now))
 	}
 
-	if cachePath != "" {
-		if err := saveCache(cachePath, sigs); err != nil {
-			return nil, fmt.Errorf("write cache: %w", err)
-		}
+	if err := saveCache(cp, sigs); err != nil {
+		return nil, fmt.Errorf("write cache: %w", err)
 	}
 	return sigs, nil
-}
-
-func (h *HackerNews) cachePath(now time.Time) string {
-	if h.cacheDir == "" {
-		return ""
-	}
-	return filepath.Join(h.cacheDir, fmt.Sprintf("%s-%s.json", hackerNewsName, now.Format("2006-01-02")))
 }
 
 func (h *HackerNews) fetchTopStories(ctx context.Context) ([]int, error) {
@@ -186,29 +171,11 @@ func (h *HackerNews) fetchItem(ctx context.Context, id int) (*hnItem, error) {
 }
 
 func (h *HackerNews) requestWithRetry(ctx context.Context, endpoint string, out any) error {
-	var lastErr error
-	backoff := hnInitialBackoff
-	for attempt := 0; attempt < hnMaxRetries; attempt++ {
-		if attempt > 0 {
-			if err := ctx.Err(); err != nil {
-				return err
-			}
-			h.sleep(backoff)
-			backoff *= 2
-			if backoff > hnMaxBackoff {
-				backoff = hnMaxBackoff
-			}
-		}
-		err := h.doRequest(ctx, endpoint, out)
-		if err == nil {
-			return nil
-		}
-		lastErr = err
-		if !isRetryable(err) {
-			return err
-		}
-	}
-	return fmt.Errorf("hackernews: max retries exceeded: %w", lastErr)
+	cfg := defaultRetryConfig(h.sleep)
+	_, err := retryFetch(ctx, cfg, hackerNewsName, func() (struct{}, error) {
+		return struct{}{}, h.doRequest(ctx, endpoint, out)
+	})
+	return err
 }
 
 func (h *HackerNews) doRequest(ctx context.Context, endpoint string, out any) error {
@@ -226,7 +193,7 @@ func (h *HackerNews) doRequest(ctx context.Context, endpoint string, out any) er
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
-		return &httpStatusError{Status: resp.StatusCode, Body: string(body)}
+		return &httpStatusError{Source: hackerNewsName, Status: resp.StatusCode, Body: string(body)}
 	}
 	if err := json.NewDecoder(resp.Body).Decode(out); err != nil {
 		return fmt.Errorf("decode body: %w", err)
