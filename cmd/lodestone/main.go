@@ -32,6 +32,7 @@ func newRootCmd() *cobra.Command {
 	cmd.PersistentFlags().StringVar(&rootPath, "root", "", "Projekt-Wurzel (Default: aktuelles Verzeichnis)")
 
 	cmd.AddCommand(newVersionCmd())
+	cmd.AddCommand(newInitCmd(&rootPath))
 	cmd.AddCommand(newFingerprintCmd(&rootPath))
 	cmd.AddCommand(newIngestCmd(&rootPath))
 	cmd.AddCommand(newScoreCmd(&rootPath))
