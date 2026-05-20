@@ -36,6 +36,7 @@ func newRootCmd() *cobra.Command {
 	cmd.AddCommand(newIngestCmd(&rootPath))
 	cmd.AddCommand(newScoreCmd(&rootPath))
 	cmd.AddCommand(newSignalsCmd(&rootPath))
+	cmd.AddCommand(newPlanCmd(&rootPath))
 
 	for _, verb := range laterPhaseVerbs {
 		cmd.AddCommand(newStubCmd(verb.name, verb.short))
@@ -50,7 +51,6 @@ type verbSpec struct {
 }
 
 var laterPhaseVerbs = []verbSpec{
-	{"plan", "Spec/Plan/Tasks aus Recommendation generieren (Phase 2)"},
 	{"recommend", "Empfehlungen interaktiv durchgehen (Phase 2)"},
 	{"apply", "Auto-PR-Engine: Recommendation als PR umsetzen (Phase 4)"},
 	{"undo", "Letzten apply-Vorgang rückgängig machen (Phase 4)"},
