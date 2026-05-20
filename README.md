@@ -29,8 +29,8 @@ lodestone score               # gegen Fingerprint scoren
 lodestone signals --top 10    # Top-10 anzeigen
 ```
 
-Detaillierte Anleitung im [**User-Guide**](docs/lodestone.md), volle
-Subkommando-Übersicht in der [**CLI-Reference**](docs/cli-reference.md).
+Detaillierte Anleitung im [**Quickstart**](docs/user/quickstart.md),
+volle Subkommando-Übersicht unter [**Befehle**](docs/user/commands/README.md).
 
 ## Was lodestone liefert
 
