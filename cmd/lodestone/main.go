@@ -21,6 +21,7 @@ func main() {
 }
 
 func newRootCmd() *cobra.Command {
+	var rootPath string
 	cmd := &cobra.Command{
 		Use:           "lodestone",
 		Short:         "Liest das AI-Ökosystem für dein Repo.",
@@ -28,12 +29,14 @@ func newRootCmd() *cobra.Command {
 		SilenceUsage:  true,
 		SilenceErrors: false,
 	}
+	cmd.PersistentFlags().StringVar(&rootPath, "root", "", "Projekt-Wurzel (Default: aktuelles Verzeichnis)")
 
 	cmd.AddCommand(newVersionCmd())
+	cmd.AddCommand(newFingerprintCmd(&rootPath))
+	cmd.AddCommand(newIngestCmd(&rootPath))
+	cmd.AddCommand(newScoreCmd(&rootPath))
+	cmd.AddCommand(newSignalsCmd(&rootPath))
 
-	for _, verb := range phase1Verbs {
-		cmd.AddCommand(newStubCmd(verb.name, verb.short))
-	}
 	for _, verb := range laterPhaseVerbs {
 		cmd.AddCommand(newStubCmd(verb.name, verb.short))
 	}
@@ -44,13 +47,6 @@ func newRootCmd() *cobra.Command {
 type verbSpec struct {
 	name  string
 	short string
-}
-
-var phase1Verbs = []verbSpec{
-	{"ingest", "Externe Signale abrufen (→ .lodestone/signals.jsonl)"},
-	{"fingerprint", "Aktuelles Repo analysieren (→ .lodestone/fingerprint.json)"},
-	{"score", "Signale × Fingerprint scoren (→ .lodestone/recommendations.jsonl)"},
-	{"signals", "Gespeicherte Signale anzeigen / filtern"},
 }
 
 var laterPhaseVerbs = []verbSpec{

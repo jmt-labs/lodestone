@@ -34,18 +34,30 @@ brew install jmt-labs/tap/lodestone
 go install github.com/jmt-labs/lodestone/cmd/lodestone@latest
 ```
 
-## Subkommandos (Phase 1)
+## Subkommandos
 
 | Verb | Status | Zweck |
 |---|---|---|
-| `lodestone ingest` | T3 / T4 | Externe Signale abrufen → `.lodestone/signals.jsonl` |
-| `lodestone fingerprint` | T5 | Aktuelles Repo analysieren → `.lodestone/fingerprint.json` |
-| `lodestone score` | T6 | Signale × Fingerprint scoren → `.lodestone/recommendations.jsonl` |
-| `lodestone signals` | T8 | Gespeicherte Signale filtern / anzeigen |
+| `lodestone fingerprint` | ✅ Phase 1 | Aktuelles Repo analysieren → `.lodestone/fingerprint.json` |
+| `lodestone ingest` | ✅ Phase 1 | Externe Signale abrufen → `.lodestone/signals.jsonl` (Quellen: GitHub-Trending, HackerNews) |
+| `lodestone score` | ✅ Phase 1 | Signale × Fingerprint scoren → `.lodestone/recommendations.jsonl` |
+| `lodestone signals` | ✅ Phase 1 | Gespeicherte Signale filtern / anzeigen |
 | `lodestone plan` | Phase 2 | Spec / Plan / Tasks aus Recommendation generieren |
 | `lodestone recommend` | Phase 2 | Empfehlungen interaktiv durchgehen |
 | `lodestone apply` / `undo` | Phase 4 | Auto-PR-Engine |
 | `lodestone stats` / `calibrate` / `share` | Phase 3+ | Telemetrie- / Tuning-Werkzeuge |
+
+## Schnelleinstieg
+
+```sh
+cd dein-projekt/
+lodestone fingerprint          # Repo analysieren
+lodestone ingest               # GitHub-Trending + HackerNews abrufen
+lodestone score                # Signale gegen Fingerprint scoren
+lodestone signals --top 10     # Top-10 nach Stars anzeigen
+```
+
+Mehr Details: [`docs/lodestone.md`](docs/lodestone.md).
 
 ## Lokale Artefakte
 

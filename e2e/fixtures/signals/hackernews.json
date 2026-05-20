@@ -1,0 +1,12 @@
+[
+  {
+    "schema_version": 1,
+    "id": "sha256:fixture-hn-1",
+    "source": "hackernews",
+    "url": "https://news.ycombinator.com/item?id=99001",
+    "title": "Claude 4.7 changes how MCP agents work",
+    "captured_at": "2026-05-20T00:00:00Z",
+    "stars": 312,
+    "topic_tags": ["claude", "mcp"]
+  }
+]
