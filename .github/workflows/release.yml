@@ -1,26 +1,46 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (z.B. v0.1.0)'
+        required: true
 
 permissions:
   contents: write
 
 jobs:
-  goreleaser:
-    name: goreleaser
+  release:
+    name: Release ${{ inputs.version }}
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Release-Branch anlegen
+        run: |
+          git checkout -b releases/${{ inputs.version }}
+          git push origin releases/${{ inputs.version }}
+
       - uses: actions/setup-go@v5
         with:
           go-version: "1.24"
           check-latest: true
-      - uses: goreleaser/goreleaser-action@v6
+          cache: true
+
+      - run: make test
+      - run: make e2e
+
+      - name: Tag setzen
+        run: |
+          git tag ${{ inputs.version }}
+          git push origin ${{ inputs.version }}
+
+      - name: GoReleaser
+        uses: goreleaser/goreleaser-action@v6
         with:
           version: latest
           args: release --clean
