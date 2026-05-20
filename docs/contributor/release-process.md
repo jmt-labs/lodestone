@@ -1,9 +1,11 @@
 # Release-Prozess
 
-> Stand: 2026-05-20, gilt ab Phase-1-Abschluss.
+> Stand: 2026-05-20. Phasen 1–4 sind auf `main`; der erste Tag steht
+> noch aus. Phasen-Status: [Roadmap](../internals/roadmap.md).
 
 Lodestone wird tag-getrieben mit [GoReleaser](https://goreleaser.com)
-released. Der erste geplante Tag ist `v0.1.0-alpha`.
+released. Der erste geplante Tag ist `v0.1.0-alpha`. Beide Binaries
+(`lodestone` und `lodestone-mcp`) landen in jedem Archive.
 
 ## Ablauf
 
