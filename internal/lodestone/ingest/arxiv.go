@@ -34,10 +34,10 @@ type ArXiv struct {
 
 type ArXivOption func(*ArXiv)
 
-func WithArXivBaseURL(u string) ArXivOption     { return func(a *ArXiv) { a.baseURL = u } }
-func WithArXivCacheDir(d string) ArXivOption    { return func(a *ArXiv) { a.cacheDir = d } }
-func WithArXivQuery(q string) ArXivOption       { return func(a *ArXiv) { a.query = q } }
-func WithArXivMax(n int) ArXivOption            { return func(a *ArXiv) { a.maxResults = n } }
+func WithArXivBaseURL(u string) ArXivOption  { return func(a *ArXiv) { a.baseURL = u } }
+func WithArXivCacheDir(d string) ArXivOption { return func(a *ArXiv) { a.cacheDir = d } }
+func WithArXivQuery(q string) ArXivOption    { return func(a *ArXiv) { a.query = q } }
+func WithArXivMax(n int) ArXivOption         { return func(a *ArXiv) { a.maxResults = n } }
 func WithArXivTimeout(d time.Duration) ArXivOption {
 	return func(a *ArXiv) { a.timeout = d }
 }
@@ -138,13 +138,13 @@ type arxivFeed struct {
 }
 
 type arxivEntry struct {
-	ID         string           `xml:"id"`
-	Title      string           `xml:"title"`
-	Summary    string           `xml:"summary"`
-	Published  time.Time        `xml:"published"`
-	Updated    time.Time        `xml:"updated"`
-	Categories []arxivCategory  `xml:"category"`
-	Authors    []arxivAuthor    `xml:"author"`
+	ID         string          `xml:"id"`
+	Title      string          `xml:"title"`
+	Summary    string          `xml:"summary"`
+	Published  time.Time       `xml:"published"`
+	Updated    time.Time       `xml:"updated"`
+	Categories []arxivCategory `xml:"category"`
+	Authors    []arxivAuthor   `xml:"author"`
 }
 
 type arxivCategory struct {
