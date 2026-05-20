@@ -50,16 +50,16 @@ Subkommando-Übersicht in der [**CLI-Reference**](docs/cli-reference.md).
 
 ## Dokumentation
 
-| Dokument | Inhalt |
+Einstieg: [`docs/README.md`](docs/README.md) bündelt alle Doku-Artefakte
+nach Zielgruppe.
+
+| Pfad | Für wen |
 |---|---|
-| [User-Guide](docs/lodestone.md) | Installation, Konfig, jedes Subkommando mit Flags |
-| [CLI-Reference](docs/cli-reference.md) | Vollständige Subkommando-Übersicht je Phase |
-| [Architektur](docs/architecture.md) | Drei-Ebenen-Modell, Datenfluss, Code-Layout |
-| [Release-Prozess](docs/release-process.md) | Tag-getriebener GoReleaser-Workflow |
-| [Skills](flavors/lodestone/skills/) | Vier Claude-Skill-Markdowns |
-| [Spec & Pläne](docs/superpowers/) | Design-Specs für Phase 1-4 |
-| [Privacy-Spec](docs/superpowers/specs/2026-05-20-lodestone-sharing-privacy.md) | Cross-Repo-Sharing (Phase 5+) |
-| [CHANGELOG](CHANGELOG.md) | Was sich pro Phase geändert hat |
+| [`docs/user/`](docs/user/) | Installation, Quickstart, Befehle, Konfig, MCP, Skills, FAQ, Troubleshooting, Glossar |
+| [`docs/contributor/`](docs/contributor/) | Workflow, TDD, PR-Checklist, Release-Prozess |
+| [`docs/internals/`](docs/internals/) | Architektur, Datenmodell, Scoring, Roadmap, ADRs |
+| [`docs/superpowers/`](docs/superpowers/) | Design-Specs und Pläne pro Phase |
+| [`CHANGELOG.md`](CHANGELOG.md) | Was sich pro Phase geändert hat |
 
 ## Lokale Artefakte
 
@@ -71,7 +71,8 @@ Snippet automatisch an. Details: [User-Guide](docs/lodestone.md).
 
 **Pre-Alpha.** Phasen 1–4 sind auf `main` gemerged und CI-grün; die
 API-Stabilität ist noch nicht garantiert (`-alpha`-Suffix bis zur
-ersten stabilen Release).
+ersten stabilen Release). Detaillierter Phasen-Status:
+[`docs/internals/roadmap.md`](docs/internals/roadmap.md).
 
 ## Beiträge
 
