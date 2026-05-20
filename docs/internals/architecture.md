@@ -1,10 +1,17 @@
-# lodestone — Architektur
+# Architektur
 
 > Stand: 2026-05-20, Phasen 1–4 auf `main`.
 
 Dieses Dokument beschreibt die Code-Struktur und den Datenfluss. Für
-die User-Sicht siehe [`lodestone.md`](lodestone.md), für die
-Subkommandos die [CLI-Reference](cli-reference.md).
+die User-Sicht siehe [Quickstart](../user/quickstart.md), für die
+Subkommandos die [Befehls-Übersicht](../user/commands/README.md).
+Verwandte Detail-Dokus:
+[Datenmodell](data-model.md) ·
+[Scoring](scoring.md) ·
+[Determinismus](determinism.md) ·
+[Artefakte](artifacts.md) ·
+[Roadmap](roadmap.md) ·
+[ADRs](adr/README.md).
 
 ## Drei-Ebenen-Modell
 
@@ -101,54 +108,13 @@ zudem einen Eintrag nach `.lodestone/decisions.log`. Diese Audit-Spur
 wird via `lodestone memory` periodisch nach `.claude/memory.json`
 konsolidiert.
 
-## Lokale Artefakte (`.lodestone/`)
+## Lokale Artefakte und Determinismus
 
-```
-.lodestone/
-├── cache/                          # Roh-Fetches mit TTL-Datum
-│   ├── github_trending-2026-05-20.json
-│   └── hackernews-2026-05-20.json
-├── signals.jsonl                   # append-only, dedupliziert
-├── fingerprint.json                # einzeln, atomar via tmp+rename
-├── recommendations.jsonl           # atomar via tmp+rename
-├── applies.jsonl                   # Auto-PR-Tracking (Phase 4)
-└── decisions.log                   # Audit-Trail, JSONL
-```
-
-`.lodestone/` gehört in `.gitignore`, mit Ausnahme von `decisions.log`
-(als Audit-Spur committable, falls gewünscht). `lodestone init` fügt
-den entsprechenden Snippet automatisch ein.
-
-## Determinismus-Garantie
-
-Zwei aufeinanderfolgende `lodestone score`-Läufe mit identischem
-Fingerprint und identischer Signal-Liste produzieren byte-identische
-`recommendations.jsonl`. Verifiziert durch:
-
-- `internal/lodestone/scoring/TestScoreDeterminism` — drei Score-Läufe
-  mit `json.Marshal`-Byte-Vergleich.
-- `e2e/lodestone_test.sh` — Snapshot vor zweitem `score`, `diff -q`
-  gegen `recommendations.jsonl` nach zweitem Lauf.
-
-Sortier-Schlüssel: `compatibility DESC, stars DESC, id ASC`.
-Recommendation-ID = `sha256:hex(signal_id + "|" + json(fingerprint))`.
-
-## Test-Pyramide
-
-```
-Unit-Tests (internal/lodestone/*)
-  └── httptest.Server für Source-Adapter
-  └── FakeRunner / FakeGit / FakePR für I/O-lastige Pfade
-  └── Golden-Fixtures unter internal/lodestone/fingerprint/testdata/
-
-E2E (e2e/lodestone_test.sh)
-  └── Wegwerf-Repo via mktemp, init + fingerprint + ingest --mock +
-      score + plan --dry-run + decisions.log-Check + Determinismus-Diff
-
-CI (.github/workflows/ci.yml)
-  └── test (vet + race) · lint (golangci-lint v2) · vuln (govulncheck)
-      · e2e · shellcheck · readme-coverage
-```
+Layout und Schreib-Strategie der `.lodestone/`-Dateien:
+[Artefakte](artifacts.md). Die Score-Pipeline garantiert
+byte-identische Outputs bei identischen Inputs — siehe
+[Determinismus](determinism.md). Test-Pyramide und CI-Gates sind in
+[`contributor/testing.md`](../contributor/testing.md) beschrieben.
 
 ## Dependency-Budget
 
