@@ -75,7 +75,23 @@ Keine Blocker für Phase-1-Abschluss, aber Notizen für später:
   Eine spätere `--format`-Option für CSV/Markdown wäre nützlich
   für Reports.
 
+## Release-Verifikation (T12)
+
+`goreleaser check` und `goreleaser release --snapshot --clean`
+am 2026-05-20 lokal ausgeführt:
+
+- Config validiert ohne Findings
+- Snapshot baut sauber für alle sechs Targets (linux/darwin/windows
+  × amd64/arm64), Build-Zeit ca. 45 s
+- `dist/` enthält erwartete sechs Archives + `checksums.txt` +
+  `artifacts.json`
+- Jedes Archive enthält Binary + LICENSE + README + CHANGELOG
+
+Release-Prozess in [`../../release-process.md`](../../release-process.md)
+dokumentiert.
+
 ## Sign-off
 
-Phase 1 ist bereit für Tag `v0.1.0-alpha` (T12). Die GoReleaser-
-Snapshot-Verifikation erfolgt in T12 separat.
+Phase 1 ist bereit für Tag `v0.1.0-alpha`. Erst der explizite User-
+Befehl löst den eigentlichen Release-Push aus
+(`git tag … && git push origin v0.1.0-alpha`).
