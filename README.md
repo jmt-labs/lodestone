@@ -65,7 +65,7 @@ nach Zielgruppe.
 
 `lodestone` schreibt nach `.lodestone/` im Zielprojekt. Per Default
 gehört dieses Verzeichnis in `.gitignore` — `lodestone init` legt den
-Snippet automatisch an. Details: [User-Guide](docs/lodestone.md).
+Snippet automatisch an. Details: [Artefakte](docs/internals/artifacts.md).
 
 ## Status
 

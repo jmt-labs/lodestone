@@ -88,3 +88,17 @@ jobs:
             fi
           done
           exit $missing
+
+  docs:
+    name: docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: docs-status-check
+        run: make docs-status-check
+      - name: docs-cmd-coverage
+        run: make docs-cmd-coverage
+      - name: skills-coverage
+        run: make skills-coverage
+      - name: docs-links
+        run: make docs-links

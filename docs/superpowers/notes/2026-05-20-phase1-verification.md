@@ -87,7 +87,7 @@ am 2026-05-20 lokal ausgeführt:
   `artifacts.json`
 - Jedes Archive enthält Binary + LICENSE + README + CHANGELOG
 
-Release-Prozess in [`../../release-process.md`](../../release-process.md)
+Release-Prozess in [`../../contributor/release-process.md`](../../contributor/release-process.md)
 dokumentiert.
 
 ## Sign-off
