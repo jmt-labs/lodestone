@@ -4,6 +4,10 @@ Alle nennenswerten Änderungen an diesem Projekt werden in dieser Datei
 dokumentiert. Format gemäß [Keep a Changelog](https://keepachangelog.com/de/1.1.0/),
 Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
+Aktueller Stand: **Phasen 1–4** sind auf `main` gemerged und CI-grün.
+Detaillierter Phasen-Status:
+[`docs/internals/roadmap.md`](docs/internals/roadmap.md).
+
 ## [Unreleased]
 
 ### Added — Phase 4
