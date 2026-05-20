@@ -17,8 +17,12 @@ import (
 )
 
 const (
-	sourceGitHubTrending = "github_trending"
-	sourceHackerNews     = "hackernews"
+	sourceGitHubTrending     = "github_trending"
+	sourceHackerNews         = "hackernews"
+	sourceArXiv              = "arxiv"
+	sourceAnthropicChangelog = "anthropic_changelog"
+	sourceOpenAIChangelog    = "openai_changelog"
+	sourceNPMTrending        = "npm_trending"
 )
 
 const mockFixturesEnv = "LODESTONE_MOCK_FIXTURES"
@@ -42,7 +46,7 @@ func newIngestCmd(rootPath *string) *cobra.Command {
 			}
 
 			if len(sources) == 0 {
-				sources = []string{sourceGitHubTrending, sourceHackerNews}
+				sources = knownSources()
 			}
 
 			s, err := openStore(p)
@@ -96,13 +100,36 @@ func buildSource(name string, cfg config.Config, cacheDir string) (ingest.Source
 		return ingest.NewHackerNews(
 			ingest.WithHackerNewsCacheDir(cacheDir),
 		), nil
+	case sourceArXiv:
+		return ingest.NewArXiv(
+			ingest.WithArXivCacheDir(cacheDir),
+		), nil
+	case sourceAnthropicChangelog:
+		return ingest.NewAnthropicChangelog(
+			ingest.WithChangelogCacheDir(cacheDir),
+		), nil
+	case sourceOpenAIChangelog:
+		return ingest.NewOpenAIChangelog(
+			ingest.WithChangelogCacheDir(cacheDir),
+		), nil
+	case sourceNPMTrending:
+		return ingest.NewNPMTrending(
+			ingest.WithNPMCacheDir(cacheDir),
+		), nil
 	default:
 		return nil, fmt.Errorf("unknown source %q; valid: %s", name, strings.Join(knownSources(), ", "))
 	}
 }
 
 func knownSources() []string {
-	return []string{sourceGitHubTrending, sourceHackerNews}
+	return []string{
+		sourceGitHubTrending,
+		sourceHackerNews,
+		sourceArXiv,
+		sourceAnthropicChangelog,
+		sourceOpenAIChangelog,
+		sourceNPMTrending,
+	}
 }
 
 func appendNew(s *store.FileStore, signals []schema.Signal) (int, error) {
