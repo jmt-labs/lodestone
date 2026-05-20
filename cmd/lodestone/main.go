@@ -39,6 +39,9 @@ func newRootCmd() *cobra.Command {
 	cmd.AddCommand(newSignalsCmd(&rootPath))
 	cmd.AddCommand(newPlanCmd(&rootPath))
 	cmd.AddCommand(newMemoryCmd(&rootPath))
+	cmd.AddCommand(newApplyCmd(&rootPath))
+	cmd.AddCommand(newUndoCmd(&rootPath))
+	cmd.AddCommand(newStatsCmd(&rootPath))
 
 	for _, verb := range laterPhaseVerbs {
 		cmd.AddCommand(newStubCmd(verb.name, verb.short))
@@ -53,12 +56,9 @@ type verbSpec struct {
 }
 
 var laterPhaseVerbs = []verbSpec{
-	{"recommend", "Empfehlungen interaktiv durchgehen (Phase 2)"},
-	{"apply", "Auto-PR-Engine: Recommendation als PR umsetzen (Phase 4)"},
-	{"undo", "Letzten apply-Vorgang rückgängig machen (Phase 4)"},
-	{"stats", "Erfolgs-Statistiken angewandter Empfehlungen (Phase 3)"},
-	{"calibrate", "Scoring-Gewichte gegen Decision-Log nachjustieren (Phase 3)"},
-	{"share", "Decisions anonymisiert teilen (Phase 4)"},
+	{"recommend", "Empfehlungen interaktiv durchgehen (Skill)"},
+	{"calibrate", "Scoring-Gewichte gegen Decision-Log nachjustieren (Phase 5+)"},
+	{"share", "Decisions anonymisiert teilen (Phase 5+, Privacy-Spec siehe docs/superpowers/specs/2026-05-20-lodestone-sharing-privacy.md)"},
 }
 
 func newStubCmd(name, short string) *cobra.Command {

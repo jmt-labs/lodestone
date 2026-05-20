@@ -6,6 +6,31 @@ Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Added — Phase 4
+
+- **Auto-PR-Engine** (`internal/lodestone/apply/`): `lodestone apply
+  <rec-id>` erzeugt einen Draft-PR aus einer Recommendation. Vier
+  unabhängige Safety-Gates müssen alle passen:
+  `risk == low`, `effort == XS`, `compatibility >= 0.85`, kein Apply
+  in den letzten 24h (`.lodestone/applies.jsonl`), `git status` sauber.
+  Branch nach Schema `lodestone/apply-<rec-suffix>-<date>`, **nie auf
+  `main` committed**.
+- **Undo** (`lodestone undo <branch-or-rec-id>`): schließt den
+  zugehörigen PR über `gh pr close --delete-branch` und entfernt
+  Branch lokal + remote. Apply-State wird auf `undone` gesetzt.
+- **Stats** (`lodestone stats`): aggregiert
+  `.lodestone/applies.jsonl` nach Status (`draft_open`,
+  `branch_pushed_no_pr`, `undone`).
+- **Privacy-Spec** für Cross-Repo-Sharing unter
+  `docs/superpowers/specs/2026-05-20-lodestone-sharing-privacy.md`:
+  legt fest, welche Felder veröffentlichbar sind, k=5-Anonymität für
+  Goals/TechInterests, Opt-In-Flow, Re-Identifikations-Schutz —
+  **noch nicht implementiert**, Code-Stub wird erst nach Beantwortung
+  der offenen Fragen ausgerollt.
+- **Pluggable Runner**: `GitRunner` und `PRRunner` Interfaces mit
+  `RealGit`/`RealPR` (shell-out zu `git`/`gh`) und Fake-Implementierungen
+  für Tests. Apply ist damit vollständig mockfähig.
+
 ### Added — Phase 3
 
 - **`lodestone-mcp` Binary** (`cmd/lodestone-mcp/`): zweites Binary,

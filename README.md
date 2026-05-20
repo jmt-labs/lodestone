@@ -47,8 +47,10 @@ go install github.com/jmt-labs/lodestone/cmd/lodestone@latest
 | `lodestone memory` | ✅ Phase 3 | `decisions.log` → `.claude/memory.json` konsolidieren |
 | `lodestone-mcp` (2. Binary) | ✅ Phase 3 | MCP-Server über stdio (`list_signals`, `query_trends`, `score_repo`, `generate_plan`, `record_decision`) |
 | `lodestone recommend` | Phase 2 (Skill) | Empfehlungen interaktiv durchgehen — `flavors/lodestone/skills/lodestone-recommend.md` |
-| `lodestone apply` / `undo` | Phase 4 | Auto-PR-Engine |
-| `lodestone stats` / `calibrate` / `share` | Phase 3+ | Telemetrie- / Tuning-Werkzeuge |
+| `lodestone apply <rec-id>` | ✅ Phase 4 | Recommendation als Draft-PR (harte Gates: risk=low ∧ effort=XS ∧ compat≥0.85, ≤1/Tag, nie auf main) |
+| `lodestone undo <branch>` | ✅ Phase 4 | Apply rückgängig (PR schließen + Branch löschen) |
+| `lodestone stats` | ✅ Phase 4 | Apply-Erfolgs-Statistik aus `.lodestone/applies.jsonl` |
+| `lodestone calibrate` / `share` | Phase 5+ | Scoring-Tuning / Cross-Repo-Sharing (Privacy-Spec liegt vor) |
 
 **Ingest-Quellen (Phase 1+2):** `github_trending`, `hackernews`,
 `arxiv`, `anthropic_changelog`, `openai_changelog`, `npm_trending`.
