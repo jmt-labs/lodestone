@@ -1,0 +1,30 @@
+[
+  {
+    "schema_version": 1,
+    "id": "sha256:fixture-gh-1",
+    "source": "github_trending",
+    "url": "https://github.com/fixture/cobra-helper",
+    "title": "fixture/cobra-helper",
+    "summary": "A small helper around cobra for fixture tests",
+    "captured_at": "2026-05-20T00:00:00Z",
+    "language": "Go",
+    "stars": 820,
+    "topic_tags": ["cobra", "cli"],
+    "license": "mit",
+    "last_commit": "2026-05-18T00:00:00Z"
+  },
+  {
+    "schema_version": 1,
+    "id": "sha256:fixture-gh-2",
+    "source": "github_trending",
+    "url": "https://github.com/fixture/react-toolkit",
+    "title": "fixture/react-toolkit",
+    "summary": "React utilities (out-of-scope for Go repo)",
+    "captured_at": "2026-05-20T00:00:00Z",
+    "language": "JavaScript",
+    "stars": 4200,
+    "topic_tags": ["react", "frontend"],
+    "license": "apache-2.0",
+    "last_commit": "2026-05-19T00:00:00Z"
+  }
+]

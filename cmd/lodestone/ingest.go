@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -10,6 +12,8 @@ import (
 
 	"github.com/jmt-labs/lodestone/internal/config"
 	"github.com/jmt-labs/lodestone/internal/lodestone/ingest"
+	"github.com/jmt-labs/lodestone/internal/lodestone/schema"
+	"github.com/jmt-labs/lodestone/internal/lodestone/store"
 )
 
 const (
@@ -17,8 +21,13 @@ const (
 	sourceHackerNews     = "hackernews"
 )
 
+const mockFixturesEnv = "LODESTONE_MOCK_FIXTURES"
+
 func newIngestCmd(rootPath *string) *cobra.Command {
-	var sources []string
+	var (
+		sources []string
+		useMock bool
+	)
 	cmd := &cobra.Command{
 		Use:   "ingest",
 		Short: "Externe Signale abrufen (→ .lodestone/signals.jsonl)",
@@ -41,6 +50,10 @@ func newIngestCmd(rootPath *string) *cobra.Command {
 				return err
 			}
 
+			if useMock {
+				return runMockIngest(cmd, sources, s)
+			}
+
 			ctx := context.Background()
 			cacheDir := filepath.Join(p.storeRoot, "cache")
 
@@ -54,19 +67,9 @@ func newIngestCmd(rootPath *string) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("fetch %s: %w", name, err)
 				}
-				added := 0
-				for _, sig := range signals {
-					ok, err := s.Has(sig.ID)
-					if err != nil {
-						return err
-					}
-					if ok {
-						continue
-					}
-					if err := s.Append(sig); err != nil {
-						return fmt.Errorf("append %s: %w", sig.ID, err)
-					}
-					added++
+				added, err := appendNew(s, signals)
+				if err != nil {
+					return err
 				}
 				totalFetched += len(signals)
 				totalNew += added
@@ -77,6 +80,7 @@ func newIngestCmd(rootPath *string) *cobra.Command {
 		},
 	}
 	cmd.Flags().StringSliceVar(&sources, "source", nil, "source name (kann mehrfach angegeben werden); Default: alle Phase-1-Quellen")
+	cmd.Flags().BoolVar(&useMock, "mock", false, "Mock-Modus: Signale aus $"+mockFixturesEnv+" laden statt HTTP-Fetch")
 	return cmd
 }
 
@@ -99,4 +103,50 @@ func buildSource(name string, cfg config.Config, cacheDir string) (ingest.Source
 
 func knownSources() []string {
 	return []string{sourceGitHubTrending, sourceHackerNews}
+}
+
+func appendNew(s *store.FileStore, signals []schema.Signal) (int, error) {
+	added := 0
+	for _, sig := range signals {
+		ok, err := s.Has(sig.ID)
+		if err != nil {
+			return added, err
+		}
+		if ok {
+			continue
+		}
+		if err := s.Append(sig); err != nil {
+			return added, fmt.Errorf("append %s: %w", sig.ID, err)
+		}
+		added++
+	}
+	return added, nil
+}
+
+func runMockIngest(cmd *cobra.Command, sources []string, s *store.FileStore) error {
+	dir := os.Getenv(mockFixturesEnv)
+	if dir == "" {
+		return fmt.Errorf("--mock requires $%s to be set to a directory containing <source>.json fixtures", mockFixturesEnv)
+	}
+	var totalFetched, totalNew int
+	for _, name := range sources {
+		path := filepath.Join(dir, name+".json")
+		raw, err := os.ReadFile(path)
+		if err != nil {
+			return fmt.Errorf("read fixture %s: %w", path, err)
+		}
+		var signals []schema.Signal
+		if err := json.Unmarshal(raw, &signals); err != nil {
+			return fmt.Errorf("parse fixture %s: %w", path, err)
+		}
+		added, err := appendNew(s, signals)
+		if err != nil {
+			return err
+		}
+		totalFetched += len(signals)
+		totalNew += added
+		fmt.Fprintf(cmd.OutOrStdout(), "ingest %s (mock): %d fetched, %d new\n", name, len(signals), added)
+	}
+	fmt.Fprintf(cmd.OutOrStdout(), "total: %d fetched, %d new\n", totalFetched, totalNew)
+	return nil
 }
