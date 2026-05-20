@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/jmt-labs/lodestone/internal/config"
+	"github.com/jmt-labs/lodestone/internal/lodestone/audit"
 	"github.com/jmt-labs/lodestone/internal/lodestone/ingest"
 	"github.com/jmt-labs/lodestone/internal/lodestone/schema"
 	"github.com/jmt-labs/lodestone/internal/lodestone/store"
@@ -80,10 +81,16 @@ func newIngestCmd(rootPath *string) *cobra.Command {
 				fmt.Fprintf(cmd.OutOrStdout(), "ingest %s: %d fetched, %d new\n", name, len(signals), added)
 			}
 			fmt.Fprintf(cmd.OutOrStdout(), "total: %d fetched, %d new\n", totalFetched, totalNew)
+			recordAudit(p, audit.Entry{
+				Verb:    "ingest",
+				Args:    map[string]string{"sources": strings.Join(sources, ",")},
+				Outcome: "ok",
+				Detail:  fmt.Sprintf("fetched=%d new=%d", totalFetched, totalNew),
+			})
 			return nil
 		},
 	}
-	cmd.Flags().StringSliceVar(&sources, "source", nil, "source name (kann mehrfach angegeben werden); Default: alle Phase-1-Quellen")
+	cmd.Flags().StringSliceVar(&sources, "source", nil, "source name (kann mehrfach angegeben werden); Default: alle bekannten Quellen")
 	cmd.Flags().BoolVar(&useMock, "mock", false, "Mock-Modus: Signale aus $"+mockFixturesEnv+" laden statt HTTP-Fetch")
 	return cmd
 }

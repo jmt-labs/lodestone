@@ -5,6 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/jmt-labs/lodestone/internal/lodestone/audit"
 	"github.com/jmt-labs/lodestone/internal/lodestone/fingerprint"
 )
 
@@ -46,6 +47,11 @@ func newFingerprintCmd(rootPath *string) *cobra.Command {
 			fmt.Fprintf(cmd.OutOrStdout(), "  frameworks: %v\n", fp.Frameworks)
 			fmt.Fprintf(cmd.OutOrStdout(), "  deps      : %d\n", len(fp.Deps))
 			fmt.Fprintf(cmd.OutOrStdout(), "  has_ci    : %v (%s)\n", fp.HasCI, fp.CIProvider)
+			recordAudit(p, audit.Entry{
+				Verb:    "fingerprint",
+				Outcome: "ok",
+				Detail:  fmt.Sprintf("languages=%v frameworks=%v deps=%d", fp.Languages, fp.Frameworks, len(fp.Deps)),
+			})
 			return nil
 		},
 	}

@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/jmt-labs/lodestone/internal/lodestone/audit"
 	"github.com/jmt-labs/lodestone/internal/lodestone/scoring"
 )
 
@@ -43,6 +44,11 @@ func newScoreCmd(rootPath *string) *cobra.Command {
 				return fmt.Errorf("replace recommendations: %w", err)
 			}
 			fmt.Fprintf(cmd.OutOrStdout(), "scored %d signals → %d recommendations\n", len(signals), len(recs))
+			recordAudit(p, audit.Entry{
+				Verb:    "score",
+				Outcome: "ok",
+				Detail:  fmt.Sprintf("signals=%d recommendations=%d", len(signals), len(recs)),
+			})
 			return nil
 		},
 	}

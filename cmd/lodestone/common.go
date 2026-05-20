@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/jmt-labs/lodestone/internal/config"
+	"github.com/jmt-labs/lodestone/internal/lodestone/audit"
 	"github.com/jmt-labs/lodestone/internal/lodestone/store"
 )
 
@@ -41,4 +42,16 @@ func openStore(p paths) (*store.FileStore, error) {
 
 func loadConfig(p paths) (config.Config, error) {
 	return config.Load(p.configPath)
+}
+
+func openAudit(p paths) (*audit.Log, error) {
+	return audit.New(p.storeRoot)
+}
+
+func recordAudit(p paths, entry audit.Entry) {
+	log, err := openAudit(p)
+	if err != nil {
+		return
+	}
+	_ = log.Record(entry)
 }

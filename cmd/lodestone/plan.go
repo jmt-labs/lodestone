@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/jmt-labs/lodestone/internal/lodestone/audit"
 	"github.com/jmt-labs/lodestone/internal/lodestone/planning"
 	"github.com/jmt-labs/lodestone/internal/lodestone/schema"
 )
@@ -68,6 +69,12 @@ Antwort als Spec + Plan unter docs/superpowers/.`,
 				return err
 			}
 			fmt.Fprintf(cmd.OutOrStdout(), "spec written → %s\nplan written → %s\nmodel: %s\n", res.SpecPath, res.PlanPath, res.Model)
+			recordAudit(p, audit.Entry{
+				Verb:    "plan",
+				Args:    map[string]string{"rec_id": recID, "model": res.Model},
+				Outcome: "ok",
+				Detail:  fmt.Sprintf("spec=%s plan=%s", res.SpecPath, res.PlanPath),
+			})
 			return nil
 		},
 	}
