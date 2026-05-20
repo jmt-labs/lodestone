@@ -1,0 +1,11 @@
+[
+  {
+    "schema_version": 1,
+    "id": "sha256:fixture-openai-1",
+    "source": "openai_changelog",
+    "url": "https://platform.openai.com/docs/changelog#2026-05-15-realtime",
+    "title": "Realtime API GA",
+    "captured_at": "2026-05-20T00:00:00Z",
+    "last_commit": "2026-05-15T00:00:00Z"
+  }
+]

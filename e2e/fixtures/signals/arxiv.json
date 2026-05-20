@@ -1,0 +1,13 @@
+[
+  {
+    "schema_version": 1,
+    "id": "sha256:fixture-arxiv-1",
+    "source": "arxiv",
+    "url": "http://arxiv.org/abs/2606.99999v1",
+    "title": "Test-Paper über agentenbasierte MCP-Pipelines",
+    "summary": "Wir präsentieren eine deterministische Pipeline…",
+    "captured_at": "2026-05-20T00:00:00Z",
+    "topic_tags": ["cs.AI"],
+    "last_commit": "2026-05-18T00:00:00Z"
+  }
+]

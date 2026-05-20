@@ -6,6 +6,36 @@ Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Added — Phase 2
+
+- **Vier neue Ingest-Quellen** in `internal/lodestone/ingest/`:
+  `arxiv` (Atom-Feed via `export.arxiv.org/api/query`),
+  `anthropic_changelog` und `openai_changelog` (HTML-Scrape mit
+  `<h2>`/`<h3>` + `YYYY-MM-DD`-Erkennung),
+  `npm_trending` (`registry.npmjs.org/-/v1/search` mit
+  `popularity=1.0`).
+- **Shared Ingest-Helper** (`ingest/cache.go`, `ingest/retry.go`):
+  `cachePath`, `loadCache`, `saveCache`, generischer `retryFetch[T]`
+  mit pluggable `defaultRetryConfig`. Ersetzt die Phase-1-Duplikation
+  in `github_trending.go` und `hackernews.go`.
+- **Planning-Engine** (`internal/lodestone/planning/`): shell-out an
+  `claude --print --model <id>` mit ablösbarem `Runner`-Interface
+  (`ClaudeRunner` / `FakeRunner`). `BuildPrompt` produziert den
+  deutschen Architekt-Prompt mit Fingerprint+Recommendation als JSON,
+  `SplitResponse` parst `===SPEC===`/`===PLAN===`-Marker, `Persist`
+  schreibt nach `docs/superpowers/specs/` und `…/plans/`.
+- **Subkommando `lodestone plan <rec-id>`** mit `--dry-run` (zeigt
+  nur den Prompt) und `--model`-Override.
+- **Subkommando `lodestone init`**: legt `.lodestone.yaml` an, hängt
+  `.gitignore`-Snippet (`.lodestone/` ignoriert, `decisions.log`
+  ausgenommen) an, installiert vier Skills nach `.claude/skills/`.
+- **Audit-Log** (`internal/lodestone/audit/`): jeder
+  `fingerprint`/`ingest`/`score`/`plan`-Aufruf appended einen JSONL-
+  Eintrag in `.lodestone/decisions.log`.
+- **Vier Claude-Skills** unter `flavors/lodestone/skills/`:
+  `lodestone-scout`, `-recommend`, `-plan`, `-review-trends` als
+  Markdown-Frontmatter; im Binary via `go:embed` eingebettet.
+
 ### Added — Phase 1 MVP
 
 Funktional vollständige, LLM-freie und deterministische Pipeline:

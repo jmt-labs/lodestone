@@ -58,6 +58,15 @@ import "testing"
 func TestNoop(t *testing.T) {}
 EOF
 
+echo "==> lodestone init"
+"$LODESTONE_BIN" init
+test -f .lodestone.yaml
+test -f .gitignore
+test -f .claude/skills/lodestone-scout.md
+test -f .claude/skills/lodestone-plan.md
+grep -q ".lodestone/" .gitignore
+
+# Goals/tech_interests werden vom Init nicht gesetzt; wir füllen sie für den Fingerprint-Test.
 cat > .lodestone.yaml <<'EOF'
 goals:
   - reliability
@@ -74,14 +83,14 @@ test -f .lodestone/fingerprint.json
 grep -q '"languages"' .lodestone/fingerprint.json
 grep -q '"goals"' .lodestone/fingerprint.json
 
-echo "==> lodestone ingest --mock"
+echo "==> lodestone ingest --mock (alle 6 Quellen)"
 export LODESTONE_MOCK_FIXTURES="$FIXTURE_DIR"
 "$LODESTONE_BIN" ingest --mock
 unset LODESTONE_MOCK_FIXTURES
 test -f .lodestone/signals.jsonl
 sig_count=$(wc -l < .lodestone/signals.jsonl)
-if [[ "$sig_count" -lt 2 ]]; then
-  echo "expected >= 2 signals, got $sig_count" >&2
+if [[ "$sig_count" -lt 6 ]]; then
+  echo "expected >= 6 signals (eine pro Quelle), got $sig_count" >&2
   exit 1
 fi
 
@@ -98,12 +107,27 @@ echo "==> lodestone signals --top 1 --json"
 "$LODESTONE_BIN" signals --top 1 --json | grep -q '"id"'
 
 echo "==> Determinismus (zweiter score-Lauf identisch?)"
-cp .lodestone/recommendations.jsonl /tmp/recs.1.jsonl
+snapshot="$tmpdir/recs.snapshot.jsonl"
+cp .lodestone/recommendations.jsonl "$snapshot"
 "$LODESTONE_BIN" score >/dev/null
-if ! diff -q /tmp/recs.1.jsonl .lodestone/recommendations.jsonl; then
+if ! diff -q "$snapshot" .lodestone/recommendations.jsonl; then
   echo "score nicht deterministisch!" >&2
   exit 1
 fi
-rm -f /tmp/recs.1.jsonl
+rm -f "$snapshot"
+
+echo "==> lodestone plan --dry-run (kein claude-Aufruf)"
+top_rec=$(head -1 .lodestone/recommendations.jsonl | sed -n 's/.*"id":"\([^"]*\)".*/\1/p')
+test -n "$top_rec" || { echo "rec_id nicht extrahierbar"; exit 1; }
+"$LODESTONE_BIN" plan --dry-run "$top_rec" | grep -q "===SPEC==="
+
+echo "==> decisions.log enthält alle Verben"
+test -f .lodestone/decisions.log
+for verb in fingerprint ingest score; do
+  if ! grep -q "\"verb\":\"$verb\"" .lodestone/decisions.log; then
+    echo "decisions.log fehlt verb=$verb" >&2
+    exit 1
+  fi
+done
 
 echo "==> OK"

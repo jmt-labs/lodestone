@@ -1,0 +1,16 @@
+[
+  {
+    "schema_version": 1,
+    "id": "sha256:fixture-npm-1",
+    "source": "npm_trending",
+    "url": "https://www.npmjs.com/package/@anthropic-ai/sdk",
+    "title": "@anthropic-ai/sdk",
+    "summary": "Anthropic Claude SDK",
+    "captured_at": "2026-05-20T00:00:00Z",
+    "language": "JavaScript",
+    "stars": 920,
+    "topic_tags": ["ai", "anthropic", "claude"],
+    "maintenance_score": 0.92,
+    "last_commit": "2026-05-18T12:00:00Z"
+  }
+]

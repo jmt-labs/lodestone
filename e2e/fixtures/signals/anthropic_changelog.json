@@ -1,0 +1,11 @@
+[
+  {
+    "schema_version": 1,
+    "id": "sha256:fixture-anthropic-1",
+    "source": "anthropic_changelog",
+    "url": "https://docs.anthropic.com/en/release-notes/api#2026-05-19-opus-4-7",
+    "title": "Opus 4.7 released",
+    "captured_at": "2026-05-20T00:00:00Z",
+    "last_commit": "2026-05-19T00:00:00Z"
+  }
+]

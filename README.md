@@ -38,23 +38,29 @@ go install github.com/jmt-labs/lodestone/cmd/lodestone@latest
 
 | Verb | Status | Zweck |
 |---|---|---|
+| `lodestone init` | ✅ Phase 2 | `.lodestone.yaml`, `.gitignore`-Snippet, Skills nach `.claude/skills/` installieren |
 | `lodestone fingerprint` | ✅ Phase 1 | Aktuelles Repo analysieren → `.lodestone/fingerprint.json` |
-| `lodestone ingest` | ✅ Phase 1 | Externe Signale abrufen → `.lodestone/signals.jsonl` (Quellen: GitHub-Trending, HackerNews) |
+| `lodestone ingest` | ✅ Phase 1-2 | Externe Signale abrufen → `.lodestone/signals.jsonl` (6 Quellen, siehe unten) |
 | `lodestone score` | ✅ Phase 1 | Signale × Fingerprint scoren → `.lodestone/recommendations.jsonl` |
 | `lodestone signals` | ✅ Phase 1 | Gespeicherte Signale filtern / anzeigen |
-| `lodestone plan` | Phase 2 | Spec / Plan / Tasks aus Recommendation generieren |
-| `lodestone recommend` | Phase 2 | Empfehlungen interaktiv durchgehen |
+| `lodestone plan <rec-id>` | ✅ Phase 2 | Spec / Plan aus Recommendation generieren (ruft Claude-CLI) |
+| `lodestone recommend` | Phase 2 (Skill) | Empfehlungen interaktiv durchgehen — `flavors/lodestone/skills/lodestone-recommend.md` |
 | `lodestone apply` / `undo` | Phase 4 | Auto-PR-Engine |
 | `lodestone stats` / `calibrate` / `share` | Phase 3+ | Telemetrie- / Tuning-Werkzeuge |
+
+**Ingest-Quellen (Phase 1+2):** `github_trending`, `hackernews`,
+`arxiv`, `anthropic_changelog`, `openai_changelog`, `npm_trending`.
 
 ## Schnelleinstieg
 
 ```sh
 cd dein-projekt/
-lodestone fingerprint          # Repo analysieren
-lodestone ingest               # GitHub-Trending + HackerNews abrufen
-lodestone score                # Signale gegen Fingerprint scoren
-lodestone signals --top 10     # Top-10 nach Stars anzeigen
+lodestone init                       # Konfig + Skills + .gitignore-Snippet
+lodestone fingerprint                # Repo analysieren
+lodestone ingest                     # alle 6 Quellen abrufen
+lodestone score                      # Signale gegen Fingerprint scoren
+lodestone signals --top 10           # Top-10 anzeigen
+lodestone plan <rec-id>              # Claude erzeugt Spec + Plan
 ```
 
 Mehr Details: [`docs/lodestone.md`](docs/lodestone.md).

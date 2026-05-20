@@ -56,7 +56,16 @@ func newIngestCmd(rootPath *string) *cobra.Command {
 			}
 
 			if useMock {
-				return runMockIngest(cmd, sources, s)
+				totalFetched, totalNew, err := runMockIngest(cmd, sources, s)
+				if err == nil {
+					recordAudit(p, audit.Entry{
+						Verb:    "ingest",
+						Args:    map[string]string{"sources": strings.Join(sources, ","), "mock": "true"},
+						Outcome: "ok",
+						Detail:  fmt.Sprintf("fetched=%d new=%d", totalFetched, totalNew),
+					})
+				}
+				return err
 			}
 
 			ctx := context.Background()
@@ -157,30 +166,30 @@ func appendNew(s *store.FileStore, signals []schema.Signal) (int, error) {
 	return added, nil
 }
 
-func runMockIngest(cmd *cobra.Command, sources []string, s *store.FileStore) error {
+func runMockIngest(cmd *cobra.Command, sources []string, s *store.FileStore) (int, int, error) {
 	dir := os.Getenv(mockFixturesEnv)
 	if dir == "" {
-		return fmt.Errorf("--mock requires $%s to be set to a directory containing <source>.json fixtures", mockFixturesEnv)
+		return 0, 0, fmt.Errorf("--mock requires $%s to be set to a directory containing <source>.json fixtures", mockFixturesEnv)
 	}
 	var totalFetched, totalNew int
 	for _, name := range sources {
 		path := filepath.Join(dir, name+".json")
 		raw, err := os.ReadFile(path)
 		if err != nil {
-			return fmt.Errorf("read fixture %s: %w", path, err)
+			return totalFetched, totalNew, fmt.Errorf("read fixture %s: %w", path, err)
 		}
 		var signals []schema.Signal
 		if err := json.Unmarshal(raw, &signals); err != nil {
-			return fmt.Errorf("parse fixture %s: %w", path, err)
+			return totalFetched, totalNew, fmt.Errorf("parse fixture %s: %w", path, err)
 		}
 		added, err := appendNew(s, signals)
 		if err != nil {
-			return err
+			return totalFetched, totalNew, err
 		}
 		totalFetched += len(signals)
 		totalNew += added
 		fmt.Fprintf(cmd.OutOrStdout(), "ingest %s (mock): %d fetched, %d new\n", name, len(signals), added)
 	}
 	fmt.Fprintf(cmd.OutOrStdout(), "total: %d fetched, %d new\n", totalFetched, totalNew)
-	return nil
+	return totalFetched, totalNew, nil
 }
