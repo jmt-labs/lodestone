@@ -13,6 +13,7 @@ gibt jedem Artefakt einen logischen Alias.
 | [`specs/2026-05-20-lodestone-phase3-design.md`](specs/2026-05-20-lodestone-phase3-design.md) | **Phase-3-Design** | 3 | ✅ umgesetzt | `lodestone-mcp`, Memory, GitHub-Action |
 | [`specs/2026-05-20-lodestone-phase4-design.md`](specs/2026-05-20-lodestone-phase4-design.md) | **Phase-4-Design** | 4 | ✅ umgesetzt | Auto-PR-Engine mit Safety-Gates |
 | [`specs/2026-05-20-lodestone-sharing-privacy.md`](specs/2026-05-20-lodestone-sharing-privacy.md) | **Privacy-Spec** | 5+ | 🚧 noch nicht umgesetzt | k=5-Anonymität, Opt-In-Flow für Cross-Repo-Sharing |
+| [`specs/2026-06-03-capability-gap-design.md`](specs/2026-06-03-capability-gap-design.md) | **Capability-Gap-Design** | Epic | 🚧 geplant | Semantischer AI-Fingerprint + `analyze`-Stufe für gezielte Verbesserungspläne |
 
 ## Pläne
 
@@ -20,6 +21,10 @@ gibt jedem Artefakt einen logischen Alias.
 |---|---|---|---|
 | [`plans/2026-05-20-lodestone-mvp.md`](plans/2026-05-20-lodestone-mvp.md) | **Phase-1-Plan** | 1 | ✅ alle Tasks erledigt |
 | [`plans/2026-05-20-lodestone-phase2.md`](plans/2026-05-20-lodestone-phase2.md) | **Phase-2-Plan** | 2 | ✅ alle Tasks erledigt |
+| [`plans/2026-06-03-capability-gap-p1-fingerprint.md`](plans/2026-06-03-capability-gap-p1-fingerprint.md) | **Capability-Gap P1** | Epic | 🚧 geplant |
+| [`plans/2026-06-03-capability-gap-p2-analyze.md`](plans/2026-06-03-capability-gap-p2-analyze.md) | **Capability-Gap P2** | Epic | 🚧 geplant |
+| [`plans/2026-06-03-capability-gap-p3-plan-consumes.md`](plans/2026-06-03-capability-gap-p3-plan-consumes.md) | **Capability-Gap P3** | Epic | 🚧 geplant |
+| [`plans/2026-06-03-capability-gap-p4-signals-adapters.md`](plans/2026-06-03-capability-gap-p4-signals-adapters.md) | **Capability-Gap P4** | Epic | 🚧 geplant |
 
 Phase 3 und Phase 4 wurden ohne dedizierten Plan umgesetzt (kleinere
 Scope, direkt aus der Spec abgearbeitet).

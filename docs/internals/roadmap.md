@@ -15,6 +15,7 @@ Stand: 2026-05-20. Phasen 1–4 sind auf `main` gemerged und CI-grün.
 | 3 | Remote-Schnittstellen (`lodestone-mcp`, `memory`, GitHub-Action) | ✅ done | — | [Phase-3-Design](../superpowers/specs/2026-05-20-lodestone-phase3-design.md) | — |
 | 4 | Auto-PR-Engine (`apply`, `undo`, `stats`, Safety-Gates) | ✅ done | — | [Phase-4-Design](../superpowers/specs/2026-05-20-lodestone-phase4-design.md) | — |
 | 5+ | `recommend`, `calibrate`, `share` (Cross-Repo-Sharing) | 🚧 Stub / geplant | — | [Privacy-Spec](../superpowers/specs/2026-05-20-lodestone-sharing-privacy.md) | — |
+| Epic | Capability-Gap-Analyse (`analyze`-Stufe, semantischer AI-Fingerprint) | 🚧 geplant | — | [Capability-Gap-Design](../superpowers/specs/2026-06-03-capability-gap-design.md) | [P1](../superpowers/plans/2026-06-03-capability-gap-p1-fingerprint.md)–[P4](../superpowers/plans/2026-06-03-capability-gap-p4-signals-adapters.md) |
 
 ## Phase 1 — Deterministische Pipeline ✅
 
@@ -73,6 +74,26 @@ Stubs für `recommend`, `calibrate`, `share`. Privacy-Spec
 k=5-Anonymität für Goals/TechInterests, Opt-In-Flow,
 Re-Identifikations-Schutz. Implementierung beginnt erst nach
 Beantwortung der offenen Privacy-Fragen.
+
+## Epic — Capability-Gap-Analyse 🚧
+
+Lodestone von einem syntaktischen Trend-Radar zu einer Capability-Gap-
+Engine. Ein semantischer AI-Fingerprint erfasst die IST-KI-Nutzung des
+Repos; eine neue, optionale `analyze`-Stufe (LLM, **nach** dem
+deterministischen Score) erzeugt konkrete Lücken + Migrationspfade, die in
+`plan` einfließen.
+
+**Geplanter Lieferumfang (vier Phasen):**
+- AI-Fingerprint: `AICapabilities` (Provider, SDKs, Modell-IDs, Patterns,
+  MCP-Rolle, Eval-Harness), deterministisch per Heuristik
+  ([ADR-0009](adr/0009-semantischer-ai-fingerprint.md)).
+- `lodestone analyze`: Enrichment-Output `.lodestone/enrichments.jsonl`,
+  Score-Pfad unangetastet ([ADR-0010](adr/0010-analyze-stufe.md)).
+- `plan` konsumiert Enrichments für gezielte, detaillierte Pläne.
+- Reicherer Signal-Content (README/Changelog) + MCP/Skill-Adapter.
+
+Anker-Use-Case: gap-getriebene Tool-Adoption. Design:
+[Capability-Gap-Design](../superpowers/specs/2026-06-03-capability-gap-design.md).
 
 ## Wie der Status aktualisiert wird
 

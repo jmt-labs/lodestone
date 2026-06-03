@@ -21,6 +21,8 @@ Bedarf von einem neuen ADR „Supersedes ADR-NNNN" abgelöst.
 | [0006](0006-deterministisches-scoring.md) | Deterministisches Scoring, keine LLM im Score-Pfad | Accepted | 1 |
 | [0007](0007-skill-embed-strategie.md) | Skill-Embed: `flavors/` kanonisch, `internal/.../skills/data/` als Copy | Accepted | 2 |
 | [0008](0008-apply-safety-gates.md) | Vier Safety-Gates für Auto-Apply | Accepted | 4 |
+| [0009](0009-semantischer-ai-fingerprint.md) | Semantischer AI-Fingerprint (deterministisch, kein LLM) | Proposed | Capability-Gap |
+| [0010](0010-analyze-stufe.md) | `analyze`-Stufe: LLM-Anreicherung nach dem Score | Proposed | Capability-Gap |
 
 ## Wann ADR statt Spec?
 

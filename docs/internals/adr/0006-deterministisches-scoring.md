@@ -2,7 +2,10 @@
 
 ## Status
 
-Accepted, 2026-05-20.
+Accepted, 2026-05-20. Erweitert durch
+[ADR-0010](0010-analyze-stufe.md) (2026-06-03): LLMs sind zusätzlich in der
+optionalen `analyze`-Stufe nach dem Score erlaubt — der Score-Pfad bleibt
+unverändert deterministisch und LLM-frei.
 
 ## Kontext
 
@@ -22,8 +25,9 @@ Audits, Diffs und Vertrauensaufbau unmöglich.
   byte-identische `recommendations.jsonl`. E2E-Diff zwischen zwei
   Läufen in `e2e/lodestone_test.sh`.
 
-LLMs sind ab Phase 2 erlaubt, aber **nur** in `lodestone plan` und
-Hilfs-Aktionen — niemals im Score-Pfad.
+LLMs sind ab Phase 2 erlaubt, aber **nur** in `lodestone plan`,
+`lodestone analyze` ([ADR-0010](0010-analyze-stufe.md)) und Hilfs-Aktionen
+— niemals im Score-Pfad.
 
 ## Konsequenzen
 
