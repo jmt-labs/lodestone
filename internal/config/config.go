@@ -9,14 +9,17 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// DefaultFilename ist der Name der Konfigurationsdatei im Projekt-Root.
 const DefaultFilename = ".lodestone.yaml"
 
+// Config hält die vollständige, mit Defaults aufgefüllte lodestone-Konfiguration.
 type Config struct {
 	Goals         []string        `yaml:"goals,omitempty"`
 	TechInterests []string        `yaml:"tech_interests,omitempty"`
 	Lodestone     LodestoneConfig `yaml:"lodestone,omitempty"`
 }
 
+// LodestoneConfig enthält die Anti-Hype-Schwellwerte für das Scoring (ADR-0005).
 type LodestoneConfig struct {
 	MinStars             int  `yaml:"min_stars"`
 	MinAgeDays           int  `yaml:"min_age_days"`
@@ -24,6 +27,7 @@ type LodestoneConfig struct {
 	RequireLicense       bool `yaml:"require_license"`
 }
 
+// Defaults gibt eine Config mit den konservativen Anti-Hype-Defaults zurück.
 func Defaults() Config {
 	return Config{
 		Lodestone: LodestoneConfig{
@@ -48,6 +52,8 @@ type rawLodestoneConfig struct {
 	RequireLicense       *bool `yaml:"require_license,omitempty"`
 }
 
+// Load liest path und mergt die Werte über die Defaults. Fehlt die Datei, werden
+// nur die Defaults zurückgegeben.
 func Load(path string) (Config, error) {
 	cfg := Defaults()
 	raw, err := os.ReadFile(path)
