@@ -25,3 +25,6 @@ coverage.html
 
 # Goreleaser local
 /dist
+# forgecrate:codegraph BEGIN
+.codegraph/
+# forgecrate:codegraph END
